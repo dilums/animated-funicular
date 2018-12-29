@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  {%- include head.html -%}
+
+  <body>
+    <script type="x-shader/x-vertex" id="vertexshader">
+			attribute float size;
+			varying vec3 vColor;
+			void main() {
+				vColor = color;
+				vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+				gl_PointSize = size * ( 300.0 / -mvPosition.z );
+				gl_Position = projectionMatrix * mvPosition;
+			}
+		</script>
+
+		<script type="x-shader/x-fragment" id="fragmentshader">
+			uniform sampler2D texture;
+			varying vec3 vColor;
+			void main() {
+				gl_FragColor = vec4( vColor, 1.0 );
+				gl_FragColor = gl_FragColor * texture2D( texture, gl_PointCoord );
+			}
+    </script>
+    
+    {%- include header.html -%}
+
+    <main class="page-content" aria-label="Content">
+        {{ content }}
+    </main>
+
+    {%- include footer.html -%}
+
+  </body>
+</html>
